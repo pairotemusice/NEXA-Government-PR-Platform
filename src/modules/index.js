@@ -17,10 +17,15 @@ import createPRWriter
 from "./pr-writer/index.js";
 
 
+import createEvidenceCheck
+from "./evidence-check/index.js";
 
 
 
-export function loadModules(options = {}){
+/**
+ * Load NEXA Modules
+ */
+export function loadModules(options = {}) {
 
 
     return {
@@ -32,7 +37,12 @@ export function loadModules(options = {}){
 
 
         prWriter:
-        createPRWriter(options)
+        createPRWriter(options),
+
+
+
+        evidenceCheck:
+        createEvidenceCheck(options)
 
 
     };
@@ -42,12 +52,19 @@ export function loadModules(options = {}){
 
 
 
-
-
+/**
+ * Module Factory Export
+ */
 export default {
+
 
     createNewsEngine,
 
-    createPRWriter
+
+    createPRWriter,
+
+
+    createEvidenceCheck
+
 
 };
