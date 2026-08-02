@@ -2,25 +2,51 @@
   "name": "nexa-government-pr-platform",
   "version": "0.2.0-alpha",
   "description": "NEXA Government PR Platform - AI Public Relations Intelligence System",
+
   "type": "module",
+
   "main": "src/NEXA.js",
 
   "scripts": {
+
     "test": "node tests/core-test.js",
-    "create-module": "node tools/nexacli/create-module.js"
+
+    "create-module": "node tools/nexacli/create-module.js",
+
+    "nexa-check": "node tools/nexacli/nexa-check.js",
+
+    "nexa-test": "node tools/nexacli/nexa-test.js",
+
+    "nexa-release": "node tools/nexacli/nexa-release.js",
+
+    "nexa-pipeline": "node tools/nexacli/nexa-pipeline.js",
+
+    "nexa-git": "node tools/nexacli/nexa-git.js"
+
   },
 
+
   "keywords": [
+
     "NEXA",
+
     "Government PR",
+
     "AI",
+
     "Public Relations",
+
     "News Intelligence"
+
   ],
+
 
   "author": "NEXA Development Team",
 
+
   "license": "MIT",
 
+
   "dependencies": {}
+
 }
