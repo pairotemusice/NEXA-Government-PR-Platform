@@ -8,8 +8,9 @@
   "main": "src/NEXA.js",
 
   "scripts": {
-
     "test": "node tests/core-test.js",
+
+    "intelligence-test": "node tests/intelligence-runtime-test.js",
 
     "create-module": "node tools/nexacli/create-module.js",
 
@@ -22,31 +23,19 @@
     "nexa-pipeline": "node tools/nexacli/nexa-pipeline.js",
 
     "nexa-git": "node tools/nexacli/nexa-git.js"
-
   },
 
-
   "keywords": [
-
     "NEXA",
-
     "Government PR",
-
     "AI",
-
     "Public Relations",
-
     "News Intelligence"
-
   ],
-
 
   "author": "NEXA Development Team",
 
-
   "license": "MIT",
 
-
   "dependencies": {}
-
 }
