@@ -5,9 +5,9 @@
  * NEXA Scaffold Generator
  *
  * Version:
- * 0.3.2-alpha
+ * 0.3.1-alpha
  *
- * Complete Auto Registry Fix
+ * Complete Auto Module Registry
  *
  * ============================================================
  */
@@ -21,12 +21,13 @@ const moduleName = process.argv[2];
 
 if (!moduleName) {
 
-    console.log(`
+    console.log(
+`
 Usage:
 
 npm run create-module <module-name>
-
-`);
+`
+    );
 
     process.exit(1);
 
@@ -37,14 +38,14 @@ npm run create-module <module-name>
 function toPascalCase(text){
 
     return text
-        .split("-")
-        .map(
-            word =>
-            word.charAt(0).toUpperCase()
-            +
-            word.slice(1)
-        )
-        .join("");
+    .split("-")
+    .map(
+        word =>
+        word.charAt(0).toUpperCase()
+        +
+        word.slice(1)
+    )
+    .join("");
 
 }
 
@@ -53,18 +54,16 @@ function toPascalCase(text){
 function toCamelCase(text){
 
     return text
-        .split("-")
-        .map(
-            (word,index)=>
-            index === 0
-            ?
-            word
-            :
-            word.charAt(0).toUpperCase()
-            +
-            word.slice(1)
-        )
-        .join("");
+    .split("-")
+    .map(
+        (word,index)=>
+        index===0
+        ?
+        word
+        :
+        word.charAt(0).toUpperCase()+word.slice(1)
+    )
+    .join("");
 
 }
 
@@ -74,8 +73,10 @@ const className =
 toPascalCase(moduleName);
 
 
+
 const factoryName =
 `create${className}`;
+
 
 
 const moduleVariable =
@@ -102,9 +103,9 @@ path.join(
 
 
 
-// ==============================
-// Create folders
-// ==============================
+// ==========================
+// Create Module Files
+// ==========================
 
 
 fs.mkdirSync(
@@ -115,12 +116,14 @@ recursive:true
 );
 
 
+
 fs.mkdirSync(
 path.join(modulePath,"tests"),
 {
 recursive:true
 }
 );
+
 
 
 fs.mkdirSync(
@@ -133,10 +136,6 @@ recursive:true
 
 
 
-// ==============================
-// Create Module
-// ==============================
-
 
 fs.writeFileSync(
 
@@ -146,23 +145,16 @@ modulePath,
 ),
 
 `
-/**
- * NEXA ${className}
- */
-
 class NEXA${className} {
 
 
 constructor(options={}){
 
-    this.name =
-    "${moduleName}";
+this.name="${moduleName}";
 
-    this.version =
-    "1.0.0-alpha";
+this.version="1.0.0-alpha";
 
-    this.options =
-    options;
+this.options=options;
 
 }
 
@@ -170,23 +162,20 @@ constructor(options={}){
 
 execute(data={}){
 
+return {
 
-    return {
+success:true,
 
-        success:true,
+module:this.name,
 
-        module:this.name,
+data
 
-        data
-
-    };
-
+};
 
 }
 
 
 }
-
 
 
 export default NEXA${className};
@@ -197,10 +186,6 @@ export default NEXA${className};
 
 
 
-
-// ==============================
-// Create Factory
-// ==============================
 
 
 fs.writeFileSync(
@@ -230,10 +215,6 @@ return new NEXA${className}(options);
 
 
 
-// ==============================
-// Create Test
-// ==============================
-
 
 fs.writeFileSync(
 
@@ -254,10 +235,6 @@ console.log(
 
 
 
-// ==============================
-// Create Documentation
-// ==============================
-
 
 fs.writeFileSync(
 
@@ -270,17 +247,24 @@ modulePath,
 `
 # NEXA ${className}
 
-Module:
-${moduleName}
-
 Version:
 1.0.0-alpha
 
+Module:
+${moduleName}
+
 `
 
-);// ==============================
-// Auto Registry Engine
-// ==============================
+);
+
+
+
+
+
+
+// ==========================
+// Auto Registry
+// ==========================
 
 
 function updateRegistry(){
@@ -294,10 +278,7 @@ registryFile,
 
 
 
-// ------------------------------
-// 1. Import Registry
-// ------------------------------
-
+// Import
 
 const importCode =
 `
@@ -323,12 +304,9 @@ registry;
 
 
 
-// ------------------------------
-// 2. Runtime Registry
-// ------------------------------
+// loadModules
 
-
-const runtimeCode =
+const loadCode =
 `
     ${moduleVariable}:
     ${factoryName}(options),
@@ -336,7 +314,7 @@ const runtimeCode =
 
 
 
-if(!registry.includes(runtimeCode.trim())){
+if(!registry.includes(loadCode.trim())){
 
 
 registry =
@@ -346,7 +324,7 @@ registry.replace(
 
 "return {\n"
 +
-runtimeCode
+loadCode
 
 );
 
@@ -356,10 +334,7 @@ runtimeCode
 
 
 
-// ------------------------------
-// 3. Export Registry
-// ------------------------------
-
+// export default
 
 const exportCode =
 `
@@ -371,34 +346,19 @@ const exportCode =
 if(!registry.includes(exportCode.trim())){
 
 
-const exportBlock =
-registry.lastIndexOf(
-"};"
-);
-
-
-
-if(exportBlock !== -1){
-
-
 registry =
-registry.substring(
-0,
-exportBlock
-)
+registry.replace(
+
+"export default {",
+
+"export default {\n"
 +
 exportCode
-+
-registry.substring(
-exportBlock
+
 );
 
 
 }
-
-
-}
-
 
 
 
@@ -416,23 +376,16 @@ registry
 
 
 
-// Run Registry Update
-
 updateRegistry();
 
 
 
 
-// ==============================
-// Result
-// ==============================
-
 
 console.log(
-
 `
 =================================
-NEXA Scaffold Generator v0.3.2
+NEXA Scaffold Generator v0.3.1
 =================================
 
 Module Created:
@@ -453,5 +406,4 @@ Generated:
 
 =================================
 `
-
 );

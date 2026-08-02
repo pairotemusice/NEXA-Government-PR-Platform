@@ -1,12 +1,4 @@
 
-import createAiSummaryTest
-from "./ai-summary-test/index.js";
-
-
-import createAiMonitorTest
-from "./ai-monitor-test/index.js";
-
-
 import createCrisisMonitorTest
 from "./crisis-monitor-test/index.js";
 
@@ -42,14 +34,6 @@ export function loadModules(options = {}) {
 
     return {
 
-    aiSummaryTest:
-    createAiSummaryTest(options),
-
-
-    aiMonitorTest:
-    createAiMonitorTest(options),
-
-
     crisismonitortest:
     createCrisisMonitorTest(options),
 
@@ -81,9 +65,6 @@ export function loadModules(options = {}) {
  */
 export default {
 
-    createAiMonitorTest,
-
-
 
     createNewsEngine,
 
@@ -94,6 +75,4 @@ export default {
     createEvidenceCheck
 
 
-
-    createAiSummaryTest,
 };
