@@ -1,78 +1,69 @@
+// NEXA Runtime Store
+// Sprint 3.11.5 Persistent Runtime
+
+
 import fs from "fs/promises";
 import path from "path";
 
-const RUNTIME_FILE = path.resolve(
-  "src/runtime/service-runtime.json"
-);
 
-export class RuntimeStore {
+class RuntimeStore {
 
-  async ensure() {
 
-    try {
+    constructor(){
 
-      await fs.access(RUNTIME_FILE);
-
-    } catch {
-
-      await fs.writeFile(
-        RUNTIME_FILE,
-        JSON.stringify({}, null, 2)
-      );
+        this.file =
+            path.resolve(
+                "src/runtime/service-runtime.json"
+            );
 
     }
 
-  }
 
 
-  async read() {
+    async load(){
 
-    await this.ensure();
+        try {
 
-    const data = await fs.readFile(
-      RUNTIME_FILE,
-      "utf-8"
-    );
-
-    return JSON.parse(data);
-
-  }
+            const content =
+                await fs.readFile(
+                    this.file,
+                    "utf-8"
+                );
 
 
-  async write(state) {
-
-    await fs.writeFile(
-      RUNTIME_FILE,
-      JSON.stringify(state, null, 2)
-    );
-
-  }
+            return JSON.parse(content);
 
 
-  async update(service, payload) {
-
-    const state = await this.read();
-
-    state[service] = {
-      ...(state[service] || {}),
-      ...payload,
-      updatedAt: new Date().toISOString()
-    };
+        } catch(error){
 
 
-    await this.write(state);
+            return {};
 
-    return state[service];
+        }
 
-  }
+    }
 
 
-  async get(service) {
 
-    const state = await this.read();
 
-    return state[service];
+    async save(data){
 
-  }
+
+        await fs.writeFile(
+            this.file,
+            JSON.stringify(
+                data,
+                null,
+                2
+            )
+        );
+
+
+    }
+
+
 
 }
+
+
+export default RuntimeStore;

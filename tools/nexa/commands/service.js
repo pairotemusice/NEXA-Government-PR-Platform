@@ -1,52 +1,79 @@
-import path from "path";
-import { fileURLToPath } from "url";
-
+import ServiceManager from "../../../src/lifecycle/service-manager.js";
 import ServiceRegistry from "../../../src/registry/service-registry.js";
-import ServiceLoader from "../../../src/registry/service-loader.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const manager = new ServiceManager();
+const registry = new ServiceRegistry();
 
 export default async function serviceCommand(args) {
 
     const action = args[3];
     const serviceName = args[4];
 
-    const registry = new ServiceRegistry();
-    const loader = new ServiceLoader();
-
-    await registry.autoRegister();
+    console.log(`
+=======================
+ NEXA Service Runtime
+=======================
+`);
 
     switch(action){
 
         case "start":
 
             if(!serviceName){
-                console.log("Please specify service name");
+                console.log("Service name required");
                 return;
             }
 
-            console.log(`\nStarting Service: ${serviceName}`);
+            console.log(`Starting Service: ${serviceName}`);
 
-            const service = await loader.load(serviceName);
+            const started =
+                await manager.start(serviceName);
 
-            if(service.start){
-                await service.start();
+            console.log(started);
+
+            break;
+
+
+        case "stop":
+
+            if(!serviceName){
+                console.log("Service name required");
+                return;
             }
 
-            console.log(
-                `✅ Service ${serviceName} started`
-            );
+            console.log(`Stopping Service: ${serviceName}`);
+
+            const stopped =
+                await manager.stop(serviceName);
+
+            console.log(stopped);
+
+            break;
+
+
+        case "restart":
+
+            if(!serviceName){
+                console.log("Service name required");
+                return;
+            }
+
+            console.log(`Restarting Service: ${serviceName}`);
+
+            await manager.stop(serviceName);
+
+            const restarted =
+                await manager.start(serviceName);
+
+            console.log(restarted);
 
             break;
 
 
         case "status":
 
-            console.log("\nNEXA Service Status");
-
-            console.table(
-                registry.list()
+            console.log(
+                await manager.status()
             );
 
             break;
@@ -54,27 +81,8 @@ export default async function serviceCommand(args) {
 
         case "health":
 
-            console.log("\nNEXA Service Health");
-
-            const services = registry.list();
-
-            services.forEach(service=>{
-                console.log(
-                    `✅ ${service.name}: ACTIVE`
-                );
-            });
-
-            break;
-
-
-        case "stop":
-
             console.log(
-                `Stopping Service: ${serviceName}`
-            );
-
-            console.log(
-                `✅ Service ${serviceName} stopped`
+                await manager.health()
             );
 
             break;
@@ -83,17 +91,18 @@ export default async function serviceCommand(args) {
         default:
 
             console.log(`
-NEXA Service Command
-
-Usage:
+Commands:
 
 nexa service start <name>
 
 nexa service stop <name>
 
+nexa service restart <name>
+
 nexa service status
 
 nexa service health
+
 `);
 
     }

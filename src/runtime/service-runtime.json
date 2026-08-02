@@ -1,8 +1,6 @@
 {
   "news": {
-    "status": "stopped",
-    "startedAt": "2026-08-02T11:13:51.645Z",
-    "updatedAt": "2026-08-02T11:13:51.659Z",
-    "stoppedAt": "2026-08-02T11:13:51.658Z"
+    "status": "running",
+    "startedAt": "2026-08-02T11:30:40.734Z"
   }
 }

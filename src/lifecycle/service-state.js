@@ -1,106 +1,102 @@
-export default class ServiceState {
+import RuntimeStore from "../runtime/runtime-store.js";
 
 
-    constructor(){
-
-        this.services = new Map();
-
-    }
+class ServiceState {
 
 
+constructor(){
 
-    register(name){
+    this.store =
+    new RuntimeStore();
 
-        this.services.set(
-
-            name,
-
-            {
-
-                name,
-
-                status:"registered",
-
-                startedAt:null,
-
-                stoppedAt:null
-
-            }
-
-        );
-
-    }
+}
 
 
 
-    start(name){
-
-        const service =
-            this.services.get(name);
+async start(name){
 
 
-        if(!service){
-
-            throw new Error(
-                `Service ${name} not found`
-            );
-
-        }
+    const data =
+    await this.store.load();
 
 
-        service.status =
-            "running";
+    data[name]={
+
+        status:"running",
+
+        startedAt:
+        new Date().toISOString()
+
+    };
 
 
-        service.startedAt =
-            new Date().toISOString();
+    await this.store.save(data);
 
 
-        return service;
+    return {
 
-    }
+        service:name,
+        ...data[name]
+
+    };
+
+}
 
 
 
 
-    stop(name){
+async stop(name){
 
 
-        const service =
-            this.services.get(name);
+    const data =
+    await this.store.load();
 
 
+    data[name]={
 
-        if(!service){
+        status:"stopped",
 
-            throw new Error(
-                `Service ${name} not found`
-            );
+        stoppedAt:
+        new Date().toISOString()
 
-        }
-
-
-        service.status =
-            "stopped";
+    };
 
 
-        service.stoppedAt =
-            new Date().toISOString();
+    await this.store.save(data);
 
 
-        return service;
+    return {
 
+        service:name,
+        ...data[name]
 
-    }
-
-
-
-    status(name){
-
-
-        return this.services.get(name);
-
-    }
+    };
 
 
 }
+
+
+
+
+async list(){
+
+
+    const data =
+    await this.store.load();
+
+
+    return Object.entries(data)
+    .map(([name,value])=>({
+
+        name,
+        ...value
+
+    }));
+
+}
+
+
+}
+
+
+export default ServiceState;
