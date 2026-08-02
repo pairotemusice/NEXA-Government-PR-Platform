@@ -1,19 +1,24 @@
-/**
- * NEXA News Intelligence Service
- * Sprint 3.11 Service Binding Layer
- */
+export default class NewsService {
 
-class NewsService {
-  constructor(intelligenceRuntime) {
-    this.intelligenceRuntime = intelligenceRuntime;
-  }
 
-  analyze(request) {
-    return this.intelligenceRuntime.execute({
-      module: "news-intelligence",
-      input: request
-    });
-  }
+    execute(input){
+
+
+        return {
+
+            service:
+                "news",
+
+            status:
+                "running",
+
+            input
+
+        };
+
+
+    }
+
+
 }
 
-module.exports = NewsService;
