@@ -7,6 +7,10 @@
 
   "main": "src/NEXA.js",
 
+  "bin": {
+    "nexa": "./tools/nexa/index.js"
+  },
+
   "scripts": {
     "test": "node tests/core-test.js",
 
@@ -28,7 +32,6 @@
   "keywords": [
     "NEXA",
     "Government PR",
-    "AI",
     "Public Relations",
     "News Intelligence"
   ],

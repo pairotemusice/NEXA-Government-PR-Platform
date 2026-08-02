@@ -1,150 +1,99 @@
 import path from "path";
-import { fileURLToPath, pathToFileURL } from "url";
+import { fileURLToPath } from "url";
 
 
 const __filename = fileURLToPath(import.meta.url);
-
 const __dirname = path.dirname(__filename);
 
 
-
-class Router {
-
-
-    constructor(){
-
-
-        this.commands = {
-
-
-            doctor:
-                "../commands/doctor",
-
-
-            create:
-                "../commands/create",
-
-
-            release:
-                "../commands/release"
-
-
-        };
-
-
-    }
-
-
-
+export default class Router {
 
     async execute(args){
-
 
         const command = args[2];
 
 
+        switch(command){
 
-        if(!command){
 
-            return this.help();
+            case "doctor":
+
+                await this.runCommand(
+                    "../commands/doctor.js",
+                    args
+                );
+
+                break;
+
+
+
+            case "create":
+
+                await this.runCommand(
+                    "../commands/create.js",
+                    args
+                );
+
+                break;
+
+
+
+            case "service":
+
+                await this.runCommand(
+                    "../commands/service.js",
+                    args
+                );
+
+                break;
+
+
+
+            case "release":
+
+                console.log(
+                    "Release command"
+                );
+
+                break;
+
+
+
+            default:
+
+                console.log(
+`
+=======================
+ NEXA DevKit v1.0 
+=======================
+
+Commands:
+
+- doctor
+
+- create
+
+- service
+
+- release
+
+`
+                );
 
         }
-
-
-
-
-        const handler = this.commands[command];
-
-
-
-        if(!handler){
-
-
-            console.log(
-                "Unknown command:",
-                command
-            );
-
-
-            return this.help();
-
-
-        }
-
-
-
-
-        const commandPath = path.resolve(
-            __dirname,
-            handler
-        );
-
-
-
-        const moduleURL =
-            pathToFileURL(
-                commandPath + ".js"
-            ).href;
-
-
-
-        const module =
-            await import(
-                moduleURL
-            );
-
-
-
-        if(module.default){
-
-
-            await module.default(
-                args.slice(3)
-            );
-
-
-        }
-
 
     }
 
 
 
+    async runCommand(file,args){
 
-
-    help(){
-
-
-        console.log("");
-
-        console.log("=======================");
-        console.log(" NEXA DevKit v1.0 ");
-        console.log("=======================");
-
-        console.log("");
-
-        console.log("Commands:");
-
-
-
-        Object.keys(
-            this.commands
-        )
-        .forEach(command=>{
-
-
-            console.log(
-                "-",
-                command
+        const module =
+            await import(
+                new URL(file,this.constructor.url)
             );
 
-
-        });
-
-
-
-        console.log("");
-
+        await module.default(args);
 
     }
 
@@ -152,5 +101,7 @@ class Router {
 }
 
 
-
-export default Router;
+Router.url =
+new URL(
+    import.meta.url
+);
