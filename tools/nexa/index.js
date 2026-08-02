@@ -1,9 +1,13 @@
-#!/usr/bin/env node
-
 import Router from "./kernel/router.js";
+
+
+const args = process.argv.slice(2);
+
+
+const command = args.shift();
 
 
 const router = new Router();
 
 
-router.execute(process.argv);
+await router.execute(command, args);

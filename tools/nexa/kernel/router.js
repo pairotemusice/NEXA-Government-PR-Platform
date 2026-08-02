@@ -1,107 +1,59 @@
-import path from "path";
-import { fileURLToPath } from "url";
+class Router {
 
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-
-export default class Router {
-
-    async execute(args){
-
-        const command = args[2];
-
+    async execute(command,args=[]){
 
         switch(command){
 
 
-            case "doctor":
+            case "supervisor":
 
-                await this.runCommand(
-                    "../commands/doctor.js",
-                    args
-                );
+                const supervisorCommand =
+                    await import("../commands/supervisor.js");
 
-                break;
-
-
-
-            case "create":
-
-                await this.runCommand(
-                    "../commands/create.js",
-                    args
-                );
-
-                break;
+                return supervisorCommand.default(args);
 
 
 
             case "service":
 
-                await this.runCommand(
-                    "../commands/service.js",
-                    args
-                );
+                const serviceCommand =
+                    await import("../commands/service.js");
 
-                break;
+                return serviceCommand.default(args);
 
 
 
-            case "release":
+            case "doctor":
 
-                console.log(
-                    "Release command"
-                );
+                const doctorCommand =
+                    await import("../commands/doctor.js");
 
-                break;
+                return doctorCommand.default(args);
 
 
 
             default:
 
-                console.log(
-`
+                console.log(`
 =======================
- NEXA DevKit v1.0 
+ NEXA DevKit v1.0
 =======================
 
 Commands:
 
 - doctor
-
 - create
-
 - service
-
+- supervisor
 - release
 
-`
-                );
+`);
 
         }
 
     }
 
-
-
-    async runCommand(file,args){
-
-        const module =
-            await import(
-                new URL(file,this.constructor.url)
-            );
-
-        await module.default(args);
-
-    }
-
-
 }
 
 
-Router.url =
-new URL(
-    import.meta.url
-);
+export default Router;

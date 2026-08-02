@@ -6,7 +6,7 @@ const supervisor =
 
 
 
-export async function supervisorCommand(args) {
+export default async function supervisorCommand(args) {
 
 
     const action = args[0];
@@ -23,6 +23,20 @@ export async function supervisorCommand(args) {
 
             console.log(
                 await supervisor.status()
+            );
+
+            break;
+
+
+
+        case "health":
+
+            console.log(
+                "NEXA Supervisor Health"
+            );
+
+            console.log(
+                await supervisor.health()
             );
 
             break;
@@ -60,13 +74,18 @@ export async function supervisorCommand(args) {
 
 
             console.log(`
-NEXA Supervisor Command
+=========================
+ NEXA Supervisor Command
+=========================
 
 Usage:
 
 nexa supervisor status
 
+nexa supervisor health
+
 nexa supervisor supervise <service>
+
 `);
 
     }
