@@ -1,5 +1,4 @@
-import ServiceManager from "../lifecycle/service-manager.js";
-import HealthChecker from "../lifecycle/health-checker.js";
+import RecoveryEngine from "./recovery/recovery-engine.js";
 
 
 export default class SupervisorManager {
@@ -7,16 +6,15 @@ export default class SupervisorManager {
 
     constructor() {
 
-        this.serviceManager =
-            new ServiceManager();
-
-        this.healthChecker =
-            new HealthChecker();
+        this.recoveryEngine =
+            new RecoveryEngine();
 
     }
 
 
+
     async status() {
+
 
         return {
 
@@ -27,11 +25,14 @@ export default class SupervisorManager {
 
         };
 
+
     }
 
 
 
+
     async health() {
+
 
         return {
 
@@ -44,11 +45,14 @@ export default class SupervisorManager {
 
         };
 
+
     }
 
 
 
+
     async supervise(serviceName) {
+
 
         return {
 
@@ -61,7 +65,35 @@ export default class SupervisorManager {
 
         };
 
+
     }
+
+
+
+
+    async recover(serviceName) {
+
+
+        return await this.recoveryEngine.recover(
+            serviceName
+        );
+
+
+    }
+
+
+
+
+    async restart(serviceName) {
+
+
+        return await this.recoveryEngine.restart(
+            serviceName
+        );
+
+
+    }
+
 
 
 }

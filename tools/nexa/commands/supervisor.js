@@ -65,6 +65,57 @@ export default async function supervisorCommand(args) {
                 await supervisor.supervise(serviceName)
             );
 
+            break;
+
+
+
+        case "restart":
+
+
+            const restartService =
+                args[1];
+
+
+            if(!restartService){
+
+                console.log(
+                    "Usage: nexa supervisor restart <service>"
+                );
+
+                return;
+
+            }
+
+
+            console.log(
+                await supervisor.restart(restartService)
+            );
+
+            break;
+
+
+
+        case "recover":
+
+
+            const recoverService =
+                args[1];
+
+
+            if(!recoverService){
+
+                console.log(
+                    "Usage: nexa supervisor recover <service>"
+                );
+
+                return;
+
+            }
+
+
+            console.log(
+                await supervisor.recover(recoverService)
+            );
 
             break;
 
@@ -74,6 +125,7 @@ export default async function supervisorCommand(args) {
 
 
             console.log(`
+
 =========================
  NEXA Supervisor Command
 =========================
@@ -85,6 +137,10 @@ nexa supervisor status
 nexa supervisor health
 
 nexa supervisor supervise <service>
+
+nexa supervisor restart <service>
+
+nexa supervisor recover <service>
 
 `);
 
